@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Movix – Lien officiel",
+  "version": "1.0.0",
+  "description": "Ouvre le lien primaire officiel de Movix et affiche la dernière adresse connue au survol de l’icône.",
+  "permissions": [
+    "alarms",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://movix.online/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Movix – Récupération du lien primaire…"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
