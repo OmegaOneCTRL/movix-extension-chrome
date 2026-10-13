@@ -10,8 +10,8 @@ const updateButton = document.getElementById('download-update');
 const checkUpdatesButton = document.getElementById('check-updates');
 let primaryUrl = null;
 
-const GITHUB_MANIFEST_URL = 'https://raw.githubusercontent.com/OmegaOneCTRL/movix-extension-chrome/main/manifest.json';
-const GITHUB_ARCHIVE_URL = 'https://github.com/OmegaOneCTRL/movix-extension-chrome/archive/refs/heads/main.zip';
+const GITHUB_LATEST_RELEASE_URL = 'https://api.github.com/repos/OmegaOneCTRL/movix-extension-chrome/releases/latest';
+let latestReleaseUrl = null;
 
 function compareVersions(left, right) {
   const parse = value => {
@@ -65,17 +65,28 @@ async function fetchPrimaryUrl() {
 async function checkForUpdates() {
   checkUpdatesButton.disabled = true;
   updateButton.classList.remove('visible');
+  latestReleaseUrl = null;
   updateStatus.textContent = 'Vérification des mises à jour…';
   try {
-    const response = await fetch(GITHUB_MANIFEST_URL, { cache: 'no-store' });
+    const response = await fetch(GITHUB_LATEST_RELEASE_URL, { cache: 'no-store' });
     if (!response.ok) throw new Error(`GitHub répond HTTP ${response.status}.`);
-    const remoteManifest = await response.json();
-    if (typeof remoteManifest.version !== 'string') throw new Error('Version GitHub introuvable.');
+    const release = await response.json();
+    if (typeof release.tag_name !== 'string' || typeof release.html_url !== 'string') {
+      throw new Error('Dernière release GitHub introuvable.');
+    }
+    const releaseUrl = new URL(release.html_url);
+    if (releaseUrl.origin !== 'https://github.com' ||
+        !releaseUrl.pathname.startsWith('/OmegaOneCTRL/movix-extension-chrome/releases/tag/')) {
+      throw new Error('Lien de release GitHub invalide.');
+    }
+    latestReleaseUrl = releaseUrl.href;
     const installedVersion = chrome.runtime.getManifest().version;
-    const comparison = compareVersions(remoteManifest.version, installedVersion);
+    const comparison = compareVersions(release.tag_name, installedVersion);
     if (comparison > 0) {
-      updateStatus.textContent = `Mise à jour disponible : v${remoteManifest.version} (installée : v${installedVersion}).`;
+      updateStatus.textContent = `Mise à jour disponible : v${release.tag_name.replace(/^v/, '')} (installée : v${installedVersion}).`;
       updateButton.classList.add('visible');
+    } else if (comparison < 0) {
+      updateStatus.textContent = `Version installée : v${installedVersion}. Dernière release publiée : v${release.tag_name.replace(/^v/, '')}.`;
     } else {
       updateStatus.textContent = `Extension à jour (v${installedVersion}).`;
     }
@@ -103,7 +114,7 @@ openBtn.addEventListener('click', () => {
 document.getElementById('retry-btn').addEventListener('click', fetchPrimaryUrl);
 checkUpdatesButton.addEventListener('click', checkForUpdates);
 updateButton.addEventListener('click', () => {
-  chrome.tabs.create({ url: GITHUB_ARCHIVE_URL, active: true });
+  if (latestReleaseUrl) chrome.tabs.create({ url: latestReleaseUrl, active: true });
 });
 fetchPrimaryUrl();
 checkForUpdates();

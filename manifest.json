@@ -9,7 +9,7 @@
   ],
   "host_permissions": [
     "https://movix.online/*",
-    "https://raw.githubusercontent.com/OmegaOneCTRL/movix-extension-chrome/*"
+    "https://api.github.com/repos/OmegaOneCTRL/movix-extension-chrome/releases/*"
   ],
   "action": {
     "default_popup": "popup.html",
