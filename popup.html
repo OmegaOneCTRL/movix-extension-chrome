@@ -87,6 +87,13 @@
     }
     .btn-ghost:hover { background: #ffffff18; color: #fff; }
 
+    /* ── Mises à jour ─────────────────────────── */
+    .update-box { margin: 0 14px 12px; padding: 12px; border: 1px solid #ffffff18; border-radius: 10px; background: #ffffff08; }
+    .update-status { margin: 0 0 9px; color: #aaa; font-size: 11px; line-height: 1.45; text-align: center; }
+    .update-actions { display: grid; gap: 7px; }
+    .update-download { display: none; }
+    .update-download.visible { display: flex; }
+
     /* ── URL Chip ────────────────────────────── */
     .url-chip {
       background: #ffffff0d; border: 1px solid #ffffff14;
@@ -153,9 +160,17 @@
 
 </div>
 
+<section class="update-box" aria-label="Mises à jour">
+  <p class="update-status" id="update-status" role="status" aria-live="polite">Vérification des mises à jour…</p>
+  <div class="update-actions">
+    <button class="btn-ghost" id="check-updates">Vérifier les mises à jour</button>
+    <button class="btn-primary update-download" id="download-update">Télécharger la mise à jour</button>
+  </div>
+</section>
+
 <!-- Footer -->
 <div class="footer">
-  <a class="footer-link" href="https://t.me/movix_site" target="_blank" id="tg-link">Telegram</a>
+  <a class="footer-link" href="https://matrix.to/#/#%5Bix%5D-commu:matrix.org" target="_blank" rel="noopener noreferrer" id="matrix-link">Matrix</a>
   <div class="alt-links" id="alt-links"></div>
 </div>
 

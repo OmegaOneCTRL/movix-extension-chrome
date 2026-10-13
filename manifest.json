@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Movix – Lien officiel",
-  "version": "1.0.0",
-  "description": "Ouvre le lien primaire officiel de Movix et affiche la dernière adresse connue au survol de l’icône.",
+  "version": "1.1.0",
+  "description": "Ouvre le lien primaire officiel de Movix et vérifie les mises à jour disponibles sur GitHub.",
   "permissions": [
     "alarms",
     "storage"
   ],
   "host_permissions": [
-    "https://movix.online/*"
+    "https://movix.online/*",
+    "https://raw.githubusercontent.com/OmegaOneCTRL/movix-extension-chrome/*"
   ],
   "action": {
     "default_popup": "popup.html",
